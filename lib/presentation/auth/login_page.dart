@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_wisata_app/presentation/auth/bloc/bloc/login_bloc.dart';
 
 import '../../core/core.dart';
 import '../home/main_page.dart';
@@ -54,11 +56,44 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: true,
                         ),
                         const SpaceHeight(86.0),
-                        Button.filled(
-                          onPressed: () {
-                            context.pushReplacement(const MainPage());
+                        BlocListener<LoginBloc, LoginState>(
+                          listener: (context, state) {
+                            state.maybeWhen(
+                                orElse: () {},
+                                success: (data) {
+                                  context.pushReplacement(const MainPage());
+                                },
+                                error: (error) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(error),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                });
                           },
-                          label: 'Login',
+                          child: BlocBuilder<LoginBloc, LoginState>(
+                            builder: (context, state) {
+                              return state.maybeWhen(orElse: () {
+                                return Button.filled(
+                                  onPressed: () {
+                                    context.read<LoginBloc>().add(
+                                          LoginEvent.login(
+                                              email: emailController.text,
+                                              password:
+                                                  passwordController.text),
+                                        );
+
+                                    // context.pushReplacement(const MainPage());
+                                  },
+                                  label: 'Login',
+                                );
+                              }, loading: () {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              });
+                            },
+                          ),
                         ),
                         const SpaceHeight(128.0),
                         Center(
