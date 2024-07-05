@@ -22,4 +22,6 @@ class AuthRemoteDataSource {
       return Left(response.body);
     }
   }
+
+  //logout
 }

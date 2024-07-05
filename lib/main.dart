@@ -5,7 +5,7 @@ import 'package:flutter_wisata_app/data/datasources/auth_remote_datasource.dart'
 import 'package:flutter_wisata_app/presentation/auth/splash_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'presentation/auth/bloc/bloc/login_bloc.dart';
+import 'presentation/auth/bloc/login/login_bloc.dart';
 
 void main() {
   runApp(const MyApp());
